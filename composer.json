@@ -1,0 +1,45 @@
+{
+    "name": "sghimire/mobile-secure-storage",
+    "version": "1.0.0",
+    "description": "Self-contained hardware-backed secure storage (Android Keystore / iOS Keychain) for NativePHP Mobile — own facade, validated native implementation, and JS bindings, with no dependency on the paid nativephp/mobile-secure-storage plugin.",
+    "type": "nativephp-plugin",
+    "keywords": ["nativephp", "secure-storage", "keychain", "keystore", "encryption", "laravel", "mobile"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sandip Ghimire",
+            "email": "sandip.ghimire@mavorion.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "nativephp/mobile": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sandip\\SecureStorage\\Native\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sandip\\SecureStorage\\Native\\SecureStorageServiceProvider"
+            ]
+        },
+        "nativephp": {
+            "manifest": "nativephp.json"
+        }
+    },
+    "require-dev": {
+        "pestphp/pest": "^3.0",
+        "laravel/pint": "^1.29"
+    },
+    "scripts": {
+        "test": "pest"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}

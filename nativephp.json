@@ -1,0 +1,79 @@
+{
+    "name": "sghimire/mobile-secure-storage",
+    "version": "1.0.0",
+    "description": "Hardware-backed encrypted key-value storage (Android Keystore / iOS Keychain) for NativePHP Mobile, free alternative to the paid nativephp/mobile-secure-storage plugin. Ships its own facade, JS bindings, and validated native implementation.",
+    "namespace": "SecureStorage",
+    "keywords": ["secure-storage", "keystore", "keychain", "encryption", "vault"],
+    "category": "security",
+    "license": "MIT",
+    "pricing": {
+        "type": "free"
+    },
+    "author": {
+        "name": "Sandip Ghimire",
+        "email": "sandip.ghimire@mavorion.com",
+        "url": ""
+    },
+    "homepage": "",
+    "repository": "",
+    "funding": [],
+    "platforms": [
+        "android",
+        "ios"
+    ],
+    "icon": "resources/icon.png",
+    "screenshots": [],
+    "bridge_functions": [
+        {
+            "name": "Vault.Set",
+            "android": "com.sandip.plugins.secure_storage.SecureStorageFunctions.Set",
+            "ios": "SecureStorageFunctions.Set",
+            "description": "Store (or delete, if value is null) a string value under a key in the platform secure store (Android Keystore-backed EncryptedSharedPreferences / iOS Keychain)."
+        },
+        {
+            "name": "Vault.Get",
+            "android": "com.sandip.plugins.secure_storage.SecureStorageFunctions.Get",
+            "ios": "SecureStorageFunctions.Get",
+            "description": "Retrieve a string value previously stored under a key, or an empty string if absent."
+        },
+        {
+            "name": "Vault.Delete",
+            "android": "com.sandip.plugins.secure_storage.SecureStorageFunctions.Delete",
+            "ios": "SecureStorageFunctions.Delete",
+            "description": "Delete the value stored under a key."
+        }
+    ],
+    "android": {
+        "min_version": 23,
+        "permissions": [],
+        "repositories": [],
+        "dependencies": {
+            "implementation": [
+                "androidx.security:security-crypto:1.1.0-alpha06"
+            ]
+        },
+        "activities": [],
+        "services": [],
+        "receivers": [],
+        "providers": []
+    },
+    "ios": {
+        "min_version": "15.0",
+        "permissions": [],
+        "repositories": [],
+        "dependencies": {
+            "swift_packages": [],
+            "pods": []
+        }
+    },
+    "assets": {
+        "android": [],
+        "ios": []
+    },
+    "secrets": [],
+    "events": [],
+    "service_provider": "Sandip\\SecureStorage\\Native\\SecureStorageServiceProvider",
+    "hooks": {
+        "copy_assets": "nativephp:mobile-secure-storage:copy-assets"
+    }
+}
