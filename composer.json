@@ -1,6 +1,5 @@
 {
     "name": "sghimire/mobile-secure-storage",
-    "version": "1.0.0",
     "description": "Self-contained hardware-backed secure storage (Android Keystore / iOS Keychain) for NativePHP Mobile — own facade, validated native implementation, and JS bindings, with no dependency on the paid nativephp/mobile-secure-storage plugin.",
     "type": "nativephp-plugin",
     "keywords": ["nativephp", "secure-storage", "keychain", "keystore", "encryption", "laravel", "mobile"],
