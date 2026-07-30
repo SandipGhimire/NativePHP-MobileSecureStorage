@@ -8,9 +8,13 @@ This package is a **free, self-contained alternative** to the paid `nativephp/mo
 
 - Simple `set` / `get` / `has` / `delete` API for storing small secrets (auth tokens, PINs, flags) securely on-device.
 - Backed by the platform's real secure storage — Android Keystore and iOS Keychain — not plain preferences/`UserDefaults`.
-- Key and value validated both in PHP/JS *and* natively before anything touches the keystore/keychain.
+- Key and value validated both in PHP/JS _and_ natively before anything touches the keystore/keychain.
 - Fully synchronous from the caller's point of view — no events to listen for.
 - Works from PHP (Blade/Livewire) and from JavaScript (Vue, React, Inertia, or plain JS).
+
+## Example App
+
+[Authenticator](https://github.com/SandipGhimire/Authenticator) is a full example app built using this plugin
 
 ## Requirements
 
@@ -44,10 +48,10 @@ Every call is validated twice:
 
 ### Limits
 
-| | Limit |
-|---|---|
+|            | Limit                                                   |
+| ---------- | ------------------------------------------------------- |
 | Key length | 255 characters, must be non-empty (not just whitespace) |
-| Value size | 8192 bytes (UTF-8 encoded) |
+| Value size | 8192 bytes (UTF-8 encoded)                              |
 
 Passing `null` as a value to `set()` is always allowed regardless of size limits — it deletes the key.
 
@@ -80,12 +84,12 @@ SecureStorage::set('auth_token', null);
 
 #### Method reference
 
-| Method | Signature | Description |
-|---|---|---|
-| `set` | `(string $key, ?string $value): bool` | Stores `$value` under `$key`, or deletes the key if `$value` is `null`. Returns `true` on success. |
-| `get` | `(string $key): ?string` | Returns the stored value, or `null` if the key doesn't exist. |
-| `has` | `(string $key): bool` | Shorthand for `get($key) !== null`. |
-| `delete` | `(string $key): bool` | Removes the key. Returns `true` on success. |
+| Method   | Signature                             | Description                                                                                        |
+| -------- | ------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `set`    | `(string $key, ?string $value): bool` | Stores `$value` under `$key`, or deletes the key if `$value` is `null`. Returns `true` on success. |
+| `get`    | `(string $key): ?string`              | Returns the stored value, or `null` if the key doesn't exist.                                      |
+| `has`    | `(string $key): bool`                 | Shorthand for `get($key) !== null`.                                                                |
+| `delete` | `(string $key): bool`                 | Removes the key. Returns `true` on success.                                                        |
 
 #### Validation
 
@@ -136,7 +140,7 @@ class AuthTokenStore
 This package doesn't publish a `#nativephp` import alias (that's reserved for NativePHP's first-party plugins). Import the file directly — either from the vendor path, or copy it into your own `resources/js/` and import it from there:
 
 ```js
-import { SecureStorage } from '../../vendor/sghimire/mobile-secure-storage/resources/js/secure-storage.js';
+import { SecureStorage } from "../../vendor/sghimire/mobile-secure-storage/resources/js/secure-storage.js";
 ```
 
 Full TypeScript types are included in `secure-storage.d.ts` alongside it.
@@ -146,29 +150,29 @@ Full TypeScript types are included in `secure-storage.d.ts` alongside it.
 Every method is `async` and returns a `Promise`:
 
 ```js
-import { SecureStorage } from '../../vendor/sghimire/mobile-secure-storage/resources/js/secure-storage.js';
+import { SecureStorage } from "../../vendor/sghimire/mobile-secure-storage/resources/js/secure-storage.js";
 
 // Store a value
-await SecureStorage.set('auth_token', 'eyJhbGciOi...');
+await SecureStorage.set("auth_token", "eyJhbGciOi...");
 
 // Retrieve it — { value: string } shape
-const { value } = await SecureStorage.get('auth_token');
+const { value } = await SecureStorage.get("auth_token");
 
 // Check existence — returns a plain boolean
-const exists = await SecureStorage.has('auth_token');
+const exists = await SecureStorage.has("auth_token");
 
 // Remove it
-await SecureStorage.delete('auth_token');
+await SecureStorage.delete("auth_token");
 
 // set(key, null) also deletes
-await SecureStorage.set('auth_token', null);
+await SecureStorage.set("auth_token", null);
 ```
 
 Invalid keys/values throw synchronously-rejected errors before any network call is made:
 
 ```js
 try {
-  await SecureStorage.set('', 'value');
+  await SecureStorage.set("", "value");
 } catch (error) {
   console.error(error.message); // "SecureStorage key must be a non-empty string."
 }
@@ -178,23 +182,23 @@ try {
 
 ```vue
 <script setup>
-import { ref } from 'vue';
-import { SecureStorage } from '../../vendor/sghimire/mobile-secure-storage/resources/js/secure-storage.js';
+import { ref } from "vue";
+import { SecureStorage } from "../../vendor/sghimire/mobile-secure-storage/resources/js/secure-storage.js";
 
 const token = ref(null);
 
 async function saveToken(value) {
-  await SecureStorage.set('auth_token', value);
+  await SecureStorage.set("auth_token", value);
   token.value = value;
 }
 
 async function loadToken() {
-  const { value } = await SecureStorage.get('auth_token');
+  const { value } = await SecureStorage.get("auth_token");
   token.value = value;
 }
 
 async function clearToken() {
-  await SecureStorage.delete('auth_token');
+  await SecureStorage.delete("auth_token");
   token.value = null;
 }
 </script>
@@ -209,19 +213,19 @@ async function clearToken() {
 ### React example
 
 ```jsx
-import { useState, useCallback } from 'react';
-import { SecureStorage } from '../../vendor/sghimire/mobile-secure-storage/resources/js/secure-storage.js';
+import { useState, useCallback } from "react";
+import { SecureStorage } from "../../vendor/sghimire/mobile-secure-storage/resources/js/secure-storage.js";
 
 export function TokenManager() {
   const [token, setToken] = useState(null);
 
   const loadToken = useCallback(async () => {
-    const { value } = await SecureStorage.get('auth_token');
+    const { value } = await SecureStorage.get("auth_token");
     setToken(value);
   }, []);
 
   const clearToken = useCallback(async () => {
-    await SecureStorage.delete('auth_token');
+    await SecureStorage.delete("auth_token");
     setToken(null);
   }, []);
 
@@ -237,24 +241,24 @@ export function TokenManager() {
 
 ### JS API reference
 
-| Method | Signature | Description |
-|---|---|---|
-| `SecureStorage.set` | `(key: string, value?: string \| null) => Promise<{ success: true }>` | Stores `value` under `key`, or deletes the key if `value` is `null`/omitted. |
-| `SecureStorage.get` | `(key: string) => Promise<{ value: string }>` | Resolves with the stored value (empty string if not found — use `.has()` to check existence explicitly). |
-| `SecureStorage.has` | `(key: string) => Promise<boolean>` | Resolves `true` if a non-empty value exists for `key`. |
-| `SecureStorage.delete` | `(key: string) => Promise<{ success: true }>` | Removes `key`. |
+| Method                 | Signature                                                             | Description                                                                                              |
+| ---------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `SecureStorage.set`    | `(key: string, value?: string \| null) => Promise<{ success: true }>` | Stores `value` under `key`, or deletes the key if `value` is `null`/omitted.                             |
+| `SecureStorage.get`    | `(key: string) => Promise<{ value: string }>`                         | Resolves with the stored value (empty string if not found — use `.has()` to check existence explicitly). |
+| `SecureStorage.has`    | `(key: string) => Promise<boolean>`                                   | Resolves `true` if a non-empty value exists for `key`.                                                   |
+| `SecureStorage.delete` | `(key: string) => Promise<{ success: true }>`                         | Removes `key`.                                                                                           |
 
 ## Error codes
 
 If validation fails on the native side (a defense-in-depth check behind the PHP/JS validation above), the bridge call rejects/returns an error with one of these codes:
 
-| Code | Meaning |
-|---|---|
-| `KEY_REQUIRED` | Key was empty or missing. |
-| `KEY_TOO_LONG` | Key exceeded 255 characters. |
-| `VALUE_TOO_LARGE` | Value exceeded 8192 bytes. |
-| `WRITE_FAILED` | (iOS) Keychain write/update failed. |
-| `DELETE_FAILED` | (iOS) Keychain delete failed. |
+| Code              | Meaning                             |
+| ----------------- | ----------------------------------- |
+| `KEY_REQUIRED`    | Key was empty or missing.           |
+| `KEY_TOO_LONG`    | Key exceeded 255 characters.        |
+| `VALUE_TOO_LARGE` | Value exceeded 8192 bytes.          |
+| `WRITE_FAILED`    | (iOS) Keychain write/update failed. |
+| `DELETE_FAILED`   | (iOS) Keychain delete failed.       |
 
 In JS, the thrown `Error` carries this in `error.code`.
 
@@ -327,21 +331,21 @@ class LoginForm extends \Livewire\Component
 
 ```js
 // resources/js/auth.js
-import axios from 'axios';
-import { SecureStorage } from '../../vendor/sghimire/mobile-secure-storage/resources/js/secure-storage.js';
+import axios from "axios";
+import { SecureStorage } from "../../vendor/sghimire/mobile-secure-storage/resources/js/secure-storage.js";
 
 export async function login(email, password) {
-  const { data } = await axios.post('/api/login', { email, password });
-  await SecureStorage.set('auth_token', data.token);
+  const { data } = await axios.post("/api/login", { email, password });
+  await SecureStorage.set("auth_token", data.token);
 }
 
 export async function logout() {
-  await SecureStorage.delete('auth_token');
+  await SecureStorage.delete("auth_token");
 }
 
 // Attach the stored token to every outgoing request
 axios.interceptors.request.use(async (config) => {
-  const { value: token } = await SecureStorage.get('auth_token');
+  const { value: token } = await SecureStorage.get("auth_token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -352,20 +356,20 @@ axios.interceptors.request.use(async (config) => {
 ```vue
 <!-- resources/js/Pages/Login.vue -->
 <script setup>
-import { ref } from 'vue';
-import { login } from '../auth.js';
+import { ref } from "vue";
+import { login } from "../auth.js";
 
-const email = ref('');
-const password = ref('');
+const email = ref("");
+const password = ref("");
 const error = ref(null);
 
 async function submit() {
   error.value = null;
   try {
     await login(email.value, password.value);
-    window.location.href = '/dashboard';
+    window.location.href = "/dashboard";
   } catch (e) {
-    error.value = 'Invalid credentials';
+    error.value = "Invalid credentials";
   }
 }
 </script>
@@ -382,12 +386,12 @@ async function submit() {
 
 ```jsx
 // resources/js/Pages/Login.jsx
-import { useState } from 'react';
-import { login } from '../auth.js';
+import { useState } from "react";
+import { login } from "../auth.js";
 
 export function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
   async function submit(e) {
@@ -395,16 +399,26 @@ export function Login() {
     setError(null);
     try {
       await login(email, password);
-      window.location.href = '/dashboard';
+      window.location.href = "/dashboard";
     } catch {
-      setError('Invalid credentials');
+      setError("Invalid credentials");
     }
   }
 
   return (
     <form onSubmit={submit}>
-      <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" />
-      <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" />
+      <input
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        type="email"
+        placeholder="Email"
+      />
+      <input
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        type="password"
+        placeholder="Password"
+      />
       <button type="submit">Log in</button>
       {error && <p>{error}</p>}
     </form>
@@ -416,12 +430,12 @@ Because `SecureStorage` is synchronous request/response with no events, the inte
 
 ## Platform notes
 
-| | Android | iOS |
-|---|---|---|
-| Min OS version | API 23 | 15.0 |
-| Storage backend | `EncryptedSharedPreferences` (AndroidX Security Crypto, Keystore-backed) | Keychain Services |
-| Permissions | None required | None required |
-| Native implementation | `resources/android/SecureStorageFunctions.kt` | `resources/ios/SecureStorageFunctions.swift` |
+|                       | Android                                                                  | iOS                                          |
+| --------------------- | ------------------------------------------------------------------------ | -------------------------------------------- |
+| Min OS version        | API 23                                                                   | 15.0                                         |
+| Storage backend       | `EncryptedSharedPreferences` (AndroidX Security Crypto, Keystore-backed) | Keychain Services                            |
+| Permissions           | None required                                                            | None required                                |
+| Native implementation | `resources/android/SecureStorageFunctions.kt`                            | `resources/ios/SecureStorageFunctions.swift` |
 
 Both are configured automatically by `nativephp.json` — you don't need to edit native project files by hand.
 
